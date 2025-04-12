@@ -1,12 +1,34 @@
-# React + Vite
+# Sentence Construction Tool (ReactJS)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive **Sentence Construction** web app built with **React**. This tool helps users learn and practice grammar by completing sentences using drag-and-drop or click-based word selections.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- Incomplete sentences with blanks
+- Word bank with multiple options
+- Real-time answer validation
+- Feedback on correct/incorrect placement
+- Option to reset and try again
+- Responsive and user-friendly UI
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+
+---
+
+## Tech Stack
+
+- **Frontend**: React.js (with Hooks)
+- **Styling**: CSS / Tailwind (based on what you use)
+- **State Management**: React useState/useEffect
+
+---
+
+## Installation
+
+1. **Clone the repo**  
+```bash
+git clone https://github.com/drishtibothra/sentence_completion.git
+cd sentence_completion
