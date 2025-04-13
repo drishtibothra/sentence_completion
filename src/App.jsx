@@ -97,26 +97,26 @@ function App() {
               {/* Game Stats */}
               <div className="grid grid-cols-3 gap-4 mb-8">
                 <div className="text-center border-r-2 border-gray-200">
-                  <h3 className="text-sm font-medium text-gray-700 mb-1">
+                  <h3 className="text-sm text-gray-700 mb-1 font-bold">
                     Time Per Question
                   </h3>
-                  <p className="text-lg font-semibold text-gray-900">30 sec</p>
+                  <p className="text-lg font-semibold text-gray-400">30 sec</p>
                 </div>
 
                 <div className="text-center border-r-2 border-gray-200">
-                  <h3 className="text-sm font-medium text-gray-700 mb-1">
+                  <h3 className="text-sm font-bold text-gray-700 mb-1">
                     Total Questions
                   </h3>
-                  <p className="text-lg font-semibold text-gray-900">{questions.length}</p>
+                  <p className="text-lg font-semibold text-gray-400">{questions.length}</p>
                 </div>
 
                 <div className="text-center">
-                  <h3 className="text-sm font-medium text-gray-700 mb-1">
+                  <h3 className="text-sm font-bold text-gray-700 mb-1">
                     Coins
                   </h3>
                   <div className="flex items-center justify-center">
-                    <span className="text-lg font-semibold text-gray-900">{coins}</span>
-                    <span className="text-yellow-400 ml-1">●</span>
+                    <span className="text-yellow-400 mb-1 mr-1">●</span>
+                    <span className="text-lg font-semibold text-gray-400">{coins}</span>
                   </div>
                 </div>
               </div>
