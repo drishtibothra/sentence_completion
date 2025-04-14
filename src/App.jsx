@@ -15,6 +15,8 @@ function App() {
 
   const currentQuestion = questions[currentQuestionIndex];
 
+
+  {/* Function to set the timer and reset it for every question */}
   useEffect(() => {
     let intervalId;
     if (gameStarted && timer > 0) {
@@ -32,6 +34,8 @@ function App() {
     return () => clearInterval(intervalId);
   }, [gameStarted, currentQuestionIndex]);
 
+
+  {/* Function to handle the start of the game */}
   const handleStartGame = () => {
     setGameStarted(true);
     setCurrentQuestionIndex(0);
@@ -46,11 +50,13 @@ function App() {
     setGameStarted(false);
   };
 
+  {/* Function to handle the end of the game */}
   const endGame = () => {
     setGameStarted(false);
     setShowDashboard(true);
   };
 
+  {/* Function to handle the submission of answers */}
   const handleSubmit = () => {
     const orderedAnswers = new Array(4).fill('');
     selectedAnswers.forEach((answer) => {
@@ -85,6 +91,7 @@ function App() {
     }
   };
 
+  {/* Function to handle the option or the answer selected so that it can removed further */}
   const handleSelectAnswer = (option) => {
     if (selectedAnswers.length < 4 && !selectedAnswers.includes(option)) {
       const firstEmptyPosition = Array(4).fill(null)
@@ -97,6 +104,7 @@ function App() {
     }
   };
 
+  {/* Function to handle the removal of answers if clicked on the blank */}
   const handleRemoveAnswer = (position) => {
     const answerAtPosition = Object.keys(answerPositions)
       .find(key => answerPositions[key] === position);
@@ -111,6 +119,8 @@ function App() {
     }
   };
 
+
+  {/* Function to get the question from the .json file */}
   const getFilledQuestion = () => {
     const parts = currentQuestion.question.split('_____________');
 
@@ -139,6 +149,8 @@ function App() {
     });
   };
 
+
+  {/* Function to show the number of questions done in the form of progress bar */}
   const renderProgressBars = () => {
     return (
       <div className="flex gap-1 mb-4">
@@ -153,11 +165,13 @@ function App() {
     );
   };
 
+  {/* Function to calculate the score */}
   const calculateScore = () => {
     const correctAnswers = userResponses.filter(response => response.isCorrect).length;
     return Math.round((correctAnswers / questions.length) * 100);
   };
 
+  {/* Function to display the feedback for the user and render the dashboard */}
   const renderDashboard = () => {
     const score = calculateScore();
 
@@ -239,7 +253,7 @@ function App() {
   };
 
   return (
-    <div className="h-[100vh] w-[100vw] bg-gray-50">
+    <div className="h-[100vh] w-[100vw] bg-gray-50"> 
       {/* Header Bar */}
       <div className="bg-white w-full py-4 px-4 flex justify-between items-center border-b">
         <Menu2 className="h-6 w-6 text-gray-700 cursor-pointer hover:text-gray-900" />
@@ -316,9 +330,11 @@ function App() {
             {/* Game Screen */}
             <div className="mb-6">
               <div className="flex justify-between items-center mb-4">
+                {/* Time Left */}
                 <span className="font-bold text-gray-600 text-lg">
                   0:{timer.toString().padStart(2, '0')}
                 </span>
+                {/* Quit button to end the game */}
                 <button
                   className="py-3 px-4 rounded-lg border-2 text-black"
                   onClick={endGame} style={{ backgroundColor: "white", borderColor: "gray" }}
@@ -327,6 +343,7 @@ function App() {
                 </button>
               </div>
 
+              {/* Progress Bar */}
               {renderProgressBars()}
 
               <div className='text-center space-y-4 mb-4 text-gray-600'>
@@ -352,6 +369,7 @@ function App() {
                 ))}
               </div>
 
+              {/* Submission Button */}
               <button
                 className="w-full mt-6 py-3 px-4 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={handleSubmit}
