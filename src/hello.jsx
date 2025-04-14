@@ -11,24 +11,6 @@ function App() {
 
   const currentQuestion = questions[currentQuestionIndex];
 
-  // Reset timer when component mounts or question changes
-  useEffect(() => {
-    let intervalId;
-    if (gameStarted && timer > 0) {
-      intervalId = setInterval(() => {
-        setTimer((prevTimer) => {
-          if (prevTimer <= 1) {
-            clearInterval(intervalId);
-            handleSubmit();
-            return 0;
-          }
-          return prevTimer - 1;
-        });
-      }, 1000);
-    }
-    return () => clearInterval(intervalId);
-  }, [gameStarted, currentQuestionIndex]);
-
   const handleStartGame = () => {
     setGameStarted(true);
     setCurrentQuestionIndex(0);
@@ -38,7 +20,7 @@ function App() {
 
   const endGame = () => {
     setGameStarted(false);
-  };
+  }
 
   const handleSubmit = () => {
     const isCorrect = selectedAnswers.every(
@@ -56,20 +38,17 @@ function App() {
     } else {
       setGameStarted(false);
     }
+
   };
 
   const handleSelectAnswer = (option) => {
-    if (selectedAnswers.length < 4 && !selectedAnswers.includes(option)) {
+    if (selectedAnswers.includes(option)) {
+      setSelectedAnswers(selectedAnswers.filter(answer => answer !== option));
+    } else if (selectedAnswers.length < 4) {
       setSelectedAnswers([...selectedAnswers, option]);
     }
   };
-
-  const handleRemoveAnswer = (index) => {
-    const newSelectedAnswers = [...selectedAnswers];
-    newSelectedAnswers.splice(index, 1);
-    setSelectedAnswers(newSelectedAnswers);
-  };
-
+  // Function to get the filled question text
   const getFilledQuestion = () => {
     const parts = currentQuestion.question.split('_____________');
 
@@ -82,12 +61,10 @@ function App() {
         <React.Fragment key={index}>
           {part}
           <span 
-            className={`inline-block min-w-[100px] px-2 py-1 mx-1 rounded ${
-              selectedAnswers[index] 
-                ? 'bg-indigo-100 border-2 border-indigo-300 cursor-pointer' 
-                : 'bg-gray-100 border-2 border-dashed border-gray-300'
-            }`}
-            onClick={() => selectedAnswers[index] && handleRemoveAnswer(index)}
+            className="inline-block min-w-[100px] px-2 py-1 mx-1 bg-gray-100 rounded border-2 border-dashed border-gray-300 cursor-pointer"
+            onClick={() => {
+              setSelectedAnswers(selectedAnswers.filter(answer => answer !== selectedAnswers[index]));
+            }}
           >
             {selectedAnswers[index] || ''}
           </span>
@@ -102,13 +79,24 @@ function App() {
         {questions.map((_, index) => (
           <div
             key={index}
-            className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
-              index <= currentQuestionIndex ? 'bg-yellow-400' : 'bg-gray-200'
-            }`}
+            className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${index <= currentQuestionIndex
+              ? 'bg-yellow-400'
+              : 'bg-gray-200'
+              }`}
           />
         ))}
       </div>
     );
+  };
+
+  const handleTimer = () => {
+    if (timer > 0) {
+      setTimeout(() => {
+        setTimer(timer - 1);
+      }, 1000);
+    } else {
+      handleSubmit();
+    }
   };
 
   return (
@@ -122,7 +110,7 @@ function App() {
 
       {/* Main Content */}
       <div className="flex items-center justify-center h-[100vh] w-[100vw] p-4">
-        <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg p-8">
+        <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg p-8 ">
           {!gameStarted ? (
             <>
               {/* Welcome Screen */}
@@ -169,8 +157,7 @@ function App() {
               {/* Buttons */}
               <div className="flex gap-4">
                 <button
-                  className="flex-1 py-3 px-4 rounded-lg border-2 border-black text-black font-medium hover:bg-gray-50 transition-colors"
-                  style={{ backgroundColor: "white" }}
+                  className="flex-1 py-3 px-4 rounded-lg border-2 border-black text-black font-medium hover:bg-gray-50 transition-colors" style={{ backgroundColor: "white" }}
                   onClick={() => console.log('Back clicked')}
                 >
                   Back
@@ -191,11 +178,12 @@ function App() {
               <div className="mb-6">
                 <div className="flex justify-between items-center mb-4">
                   <span className="font-bold text-gray-600 text-lg">
-                    0:{timer.toString().padStart(2, '0')}
+                    0:{timer}
+                    {handleTimer()}
+
                   </span>
                   <button
-                    className="py-3 px-4 rounded-lg border-2 text-black"
-                    style={{ backgroundColor: "white", borderColor: "gray" }}
+                    className=" py-3 px-4 rounded-lg border-2 text-black" style={{ backgroundColor: "white", borderColor: "gray" }}
                     onClick={endGame}
                   >
                     Quit
@@ -204,26 +192,24 @@ function App() {
 
                 {renderProgressBars()}
 
-                <div className="text-center space-y-5 text-gray-500 mb-4">
-                  Select the missing words in the correct order.
-                </div>
-
                 <div className="text-lg text-gray-800 mb-6 p-4 bg-gray-50 rounded-lg">
                   {getFilledQuestion()}
                 </div>
 
-                <div className="flex gap-4 justify-center">
+                <div className="flex gap-4">
                   {currentQuestion.options.map((option, index) => (
-                    !selectedAnswers.includes(option) && (
-                      <button
-                        key={index}
-                        className=" p-4 rounded-lg border-2 text-left text-black transition-colors border-gray-200 hover:border-gray-300"
-                        style={{ backgroundColor: "white", borderColor: "black" }}
-                        onClick={() => handleSelectAnswer(option)}
-                      >
-                        {option}
-                      </button>
-                    )
+                    <button
+                      key={index}
+                      className={`w-full p-4 rounded-lg border-2 text-left text-black transition-colors ${selectedAnswers.includes(option)
+                        ? 'border-indigo-600 bg-indigo-50'
+                        : 'border-gray-200 hover:border-gray-300'
+                        } ${selectedAnswers.length >= 4 && !selectedAnswers.includes(option) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      style={{ backgroundColor: "white", borderColor: "black" }}
+                      onClick={() => handleSelectAnswer(option)}
+                      disabled={selectedAnswers.length >= 4 && !selectedAnswers.includes(option)}
+                    >
+                      {option}
+                    </button>
                   ))}
                 </div>
 
